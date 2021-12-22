@@ -9,6 +9,12 @@ function read(req, res, next) {
   res.json({ data: movie });
 }
 
+async function readTheatersByMovie(req, res, next) {
+  const movieId = req.params.movieId;
+  const data = await moviesService.readTheatersByMovie(movieId);
+  res.json({ data });
+}
+
 async function list(req, res, next) {
   const { is_showing } = req.query;
   const data = is_showing
@@ -37,4 +43,5 @@ function movieExists(req, res, next) {
 module.exports = {
   list,
   read: [movieExists, read],
+  readTheatersByMovie: [movieExists, readTheatersByMovie],
 };
