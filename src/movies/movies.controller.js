@@ -10,7 +10,10 @@ function read(req, res, next) {
 }
 
 async function list(req, res, next) {
-  const data = await moviesService.list();
+  const { is_showing } = req.query;
+  const data = is_showing
+    ? await moviesService.listCurrentlyShowing()
+    : await moviesService.list();
   res.json({ data });
 }
 
@@ -26,7 +29,7 @@ function movieExists(req, res, next) {
         res.locals.movie = movie;
         return next();
       }
-      next({ status: 400, message: "Movie cannot be found." });
+      next({ status: 404, message: "Movie cannot be found." });
     })
     .catch(next);
 }
