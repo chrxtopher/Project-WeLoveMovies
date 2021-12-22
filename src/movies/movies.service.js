@@ -1,3 +1,9 @@
 const knex = require("../db/connection");
 
-module.exports = {};
+function list() {
+  return knex("movies").select("*");
+}
+
+module.exports = {
+  list,
+};
