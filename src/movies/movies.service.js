@@ -25,9 +25,17 @@ function readTheatersByMovie(movieId) {
     .where({ "mt.movie_id": movieId });
 }
 
+function readReviewsForMovie(movieId) {
+  return knex("reviews as r")
+    .join("critics as c", "r.critic_id", "c.critic_id")
+    .select("r.*", "c.*")
+    .where({ "r.movie_id": movieId });
+}
+
 module.exports = {
   list,
   listCurrentlyShowing,
   read,
   readTheatersByMovie,
+  readReviewsForMovie,
 };
