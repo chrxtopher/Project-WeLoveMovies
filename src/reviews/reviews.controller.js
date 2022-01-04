@@ -5,6 +5,17 @@ function read(req, res, next) {
   res.json({ data: review });
 }
 
+function update(req, res, next) {
+  const updatedReview = {
+    ...req.body.data,
+    review_id: res.locals.review.review_id,
+  };
+  reviewService
+    .update(updatedReview)
+    .then((review) => res.json({ review }))
+    .catch(next);
+}
+
 function destroy(req, res, next) {
   reviewService
     .delete(res.locals.review.review_id)
@@ -31,5 +42,6 @@ function reviewExists(req, res, next) {
 
 module.exports = {
   read: [reviewExists, read],
+  update: [reviewExists, update],
   delete: [reviewExists, destroy],
 };
