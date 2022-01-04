@@ -18,7 +18,15 @@ async function readTheatersByMovie(req, res, next) {
 async function readReviewsForMovie(req, res, next) {
   const movieId = req.params.movieId;
   const data = await moviesService.readReviewsForMovie(movieId);
-  res.json({ data });
+  const critics = await moviesService.listCritics();
+
+  const content = data.map((review) => {
+    const foundCritic = {
+      critic: critics.find((critic) => critic.critic_id === review.critic_id),
+    };
+    return { ...review, ...foundCritic };
+  });
+  res.json({ data: content });
 }
 
 async function list(req, res, next) {
