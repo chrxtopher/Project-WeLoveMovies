@@ -3,7 +3,7 @@ const controller = require("./reviews.controller");
 
 router
   .route("/:reviewId")
-  .get(controller.read)
+  .get(controller.readAttachCritic)
   .put(controller.update)
   .delete(controller.delete);
 
