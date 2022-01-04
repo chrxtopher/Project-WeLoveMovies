@@ -14,15 +14,15 @@ async function readAttachCritic(req, res, next) {
   res.json({ data: review });
 }
 
-function update(req, res, next) {
+async function update(req, res, next) {
   const updatedReview = {
     ...req.body.data,
     review_id: res.locals.review.review_id,
   };
-  reviewService
-    .update(updatedReview)
-    .then((review) => res.json({ review }))
-    .catch(next);
+  await reviewService.update(updatedReview);
+  const update = await reviewService.readAttachCritic(req.params.reviewId);
+
+  res.json({ data: update });
 }
 
 function destroy(req, res, next) {
