@@ -41,7 +41,10 @@ const generateReviews = (criticIds, movieIds) => {
 exports.seed = async function (knex) {
   const criticIds = await knex("critics").select("critic_id");
   const movieIds = await knex("movies").select("movie_id");
-
   const reviews = generateReviews(criticIds, movieIds);
-  return knex("reviews").insert(reviews);
+  return knex
+    .raw("TRUNCATE TABLE reviews RESTART IDENTITY CASCADE")
+    .then(function () {
+      return knex("reviews").insert(reviews);
+    });
 };
