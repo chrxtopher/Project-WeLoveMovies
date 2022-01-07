@@ -25,28 +25,25 @@ async function update(req, res, next) {
   res.json({ data: update });
 }
 
-function destroy(req, res, next) {
-  reviewService
-    .delete(res.locals.review.review_id)
-    .then(() => res.sendStatus(204))
-    .catch(next);
+async function destroy(req, res, next) {
+  await reviewService.delete(res.locals.review.review_id);
+  res.sendStatus(204);
 }
 
 ////////////////
 // VALIDATION //
 ////////////////
 
-function reviewExists(req, res, next) {
-  reviewService
-    .read(req.params.reviewId)
-    .then((review) => {
-      if (review) {
-        res.locals.review = review;
-        return next();
-      }
-      next({ status: 404, message: "Review cannot be found." });
-    })
-    .catch(next);
+async function reviewExists(req, res, next) {
+  const review = await reviewService.read(req.params.reviewId);
+  if (review) {
+    res.locals.review = review;
+    return next();
+  }
+  next({
+    status: 404,
+    message: "Review cannot be found.",
+  });
 }
 
 module.exports = {

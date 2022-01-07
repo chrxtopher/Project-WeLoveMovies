@@ -41,17 +41,16 @@ async function list(req, res, next) {
 // VALIDATION //
 ////////////////
 
-function movieExists(req, res, next) {
-  moviesService
-    .read(req.params.movieId)
-    .then((movie) => {
-      if (movie) {
-        res.locals.movie = movie;
-        return next();
-      }
-      next({ status: 404, message: "Movie cannot be found." });
-    })
-    .catch(next);
+async function movieExists(req, res, next) {
+  const movie = await moviesService.read(req.params.movieId);
+  if (movie) {
+    res.locals.movie = movie;
+    return next();
+  }
+  next({
+    status: 404,
+    message: "Movie cannot be found",
+  });
 }
 
 module.exports = {
