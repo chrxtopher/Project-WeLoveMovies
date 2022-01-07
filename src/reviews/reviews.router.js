@@ -1,10 +1,12 @@
 const router = require("express").Router();
 const controller = require("./reviews.controller");
+const methodNotAllowed = require("../errors/methodNotAllowed");
 
 router
   .route("/:reviewId")
   .get(controller.readAttachCritic)
   .put(controller.update)
-  .delete(controller.delete);
+  .delete(controller.delete)
+  .all(methodNotAllowed);
 
 module.exports = router;
